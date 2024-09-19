@@ -178,7 +178,7 @@ $("#editPersonnelModal").on("show.bs.modal", function (e) {
         $("#editPersonnelJobTitle").val(result.personnel[0].jobTitle);
         $("#editPersonnelEmailAddress").val(result.personnel[0].email);
 
-        $("#editPersonnelDepartment").html("");
+        $("#editPersonnelDepartment").empty();
 
         $.each(result.department, function () {
           $("#editPersonnelDepartment").append(
@@ -265,12 +265,14 @@ $("#deletePersonnelModal").on("show.bs.modal", function (e) {
 
   // Get the data-id attribute from the button
   let personnelId = $(e.relatedTarget).attr("data-id") ;
-        
+  let user = $(e.relatedTarget).attr("data-user")      
     
     
     
         // Set the ID in the hidden input of the modal
-        $('#deletePersonnelEmployeeID').val(personnelId);
+  $('#deletePersonnelEmployeeID').val(personnelId);
+  $(this).find("#data_user").text(user)
+  
     });
 
 
@@ -615,11 +617,11 @@ function appendRowToTable(data, tableSelector) {
         </td>
         <td class="text-end text-nowrap">
           <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-            data-bs-target="#editPersonnelModal" data-id="${data.id}">
+            data-bs-target="#editPersonnelModal" data-id="${data.id}" data-user="${data.firstName}, ${data.lastName}">
             <i class="fa-solid fa-pencil fa-fw"></i>
           </button>
           <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-            data-bs-target="#deletePersonnelModal" data-id="${data.id}">
+            data-bs-target="#deletePersonnelModal" data-id="${data.id}" data-user="${data.firstName}, ${data.lastName}">
             <i class="fa-solid fa-trash fa-fw"></i>
           </button>
         </td>
@@ -715,7 +717,7 @@ function fetchAllDepartsmentData(searchTerm= null) {
       data.map(dat => appendRowToTable(dat, '#departmentTableBody'))
 
 
-      //  $("#createPersonnelDepartment").html("");
+       $("#createPersonnelDepartment").empty();
 
         $.each(data, function () {
           $("#createPersonnelDepartment").append(

@@ -49,7 +49,7 @@ function fetchPersonnelData($id = null, $searchTerm = null) {
             $sql .= " WHERE personnel.firstName LIKE :searchTerm OR personnel.lastName LIKE :searchTerm"; // Filter by search term
         }
 
-        $sql .= " ORDER BY personnel.id DESC"; 
+        $sql .= " ORDER BY personnel.firstName ASC"; 
 
         // Prepare the statement
         $stmt = $conn->prepare($sql);
@@ -87,11 +87,15 @@ function fetchAllDepartsmentData($searchTerm=null){
     location.name AS location_name 
 FROM department
 JOIN location ON department.locationID = location.id
-GROUP BY department.id, department_name;
+;"; 
 
-"; 
+if($searchTerm != null){
+    
+    $sql .= " WHERE department.name LIKE :searchTerm"; 
+}
 
-$sql .= "WHERE department.name LIKE :searchTerm"; 
+$sql .= " GROUP BY  department.name";
+
 $stmt = $conn->prepare($sql);
 
   if ($searchTerm) {
@@ -99,11 +103,17 @@ $stmt = $conn->prepare($sql);
         }
         $stmt->execute(); // Execute the statement
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all data
+
+        usort($result, function($a, $b) {
+    return strcmp($a['department_name'], $b['department_name']);
+});
+
         return $result; // Return the result
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
 }
+
 
 
 
@@ -193,7 +203,13 @@ FROM location
 ");
         $stmt->execute(); // Execute the statement
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all data
+
+        usort($result, function($a, $b) {
+    return strcmp($a['location_name'], $b['location_name']);
+});
         return $result; // Return the result
+
+        
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
