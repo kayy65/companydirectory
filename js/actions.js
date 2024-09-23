@@ -597,83 +597,232 @@ $("#deleteLocationForm").on("submit", function (e) {
 // Function to append a row using jQuery
 function appendRowToTable(data, tableSelector) {
   // Define the HTML content for the new row
+    var row = document.createElement('tr')
 
-  let newRow = ''; // Initialize newRow variable
 
-  if (tableSelector === '#personnelTableBody') {
-    newRow = `
-      <tr>
-        <td class="align-middle text-nowrap">
-          ${data.firstName}, ${data.lastName}
-        </td>
-        <td class="align-middle text-nowrap d-none d-md-table-cell">
-          ${data.department_name}
-        </td>
-        <td class="align-middle text-nowrap d-none d-md-table-cell">
-          ${data.location_name}
-        </td>
-        <td class="align-middle text-nowrap d-none d-md-table-cell">
-          ${data.email}
-        </td>
-        <td class="text-end text-nowrap">
-          <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-            data-bs-target="#editPersonnelModal" data-id="${data.id}" data-user="${data.firstName}, ${data.lastName}">
-            <i class="fa-solid fa-pencil fa-fw"></i>
-          </button>
-          <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-            data-bs-target="#deletePersonnelModal" data-id="${data.id}" data-user="${data.firstName}, ${data.lastName}">
-            <i class="fa-solid fa-trash fa-fw"></i>
-          </button>
-        </td>
-      </tr>
-    `;
-  } else if (tableSelector === '#departmentTableBody') {
-    newRow = `
-      <tr>
-        <td class="align-middle text-nowrap">
-          ${data.department_name}
-        </td>
-        <td class="align-middle text-nowrap d-none d-md-table-cell">
-          ${data.location_name}
-        </td>
-        <td class="align-middle text-end text-nowrap">
-          <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-            data-bs-target="#editDepartmentModal" data-id="${data.id}" data-name="${data.department_name}"  data-location="${data.location_id}">
-            <i class="fa-solid fa-pencil fa-fw"></i>
-          </button>
-          <button type="button" class="btn btn-primary btn-sm" id= "deleteDepartmentBtn"  data-bs-toggle="modal"  data-bs-target="#deleteDepartmentModal"   data-id="${data.id}" data-name="${data.department_name}" data-location="${data.location_id}">
-            <i class="fa-solid fa-trash fa-fw"></i>
-          </button>
-        </td>
-      </tr>
-    `;
-  } else if (tableSelector === '#locationTableBody') {
-    newRow = `
-     <tr>
-              <td class="align-middle text-nowrap">
-                ${data.location_name}
-              </td>
-              <td class="align-middle text-end text-nowrap">
-                <button type="button" class="btn btn-primary btn-sm"      data-bs-toggle="modal"
-            data-bs-target="#editLocationModal" data-id="${data.location_id}" data-name="${data.location_name}"  data-location="${data.location_id}">
-                  <i class="fa-solid fa-pencil fa-fw"></i>
-                </button>
-                <button type="button" class="btn btn-primary btn-sm"
-                
-                data-bs-toggle="modal"
-            data-bs-target="#deleteLocationModal" data-id="${data.location_id}" data-name="${data.location_name}"  data-location="${data.location_id}"
-                >
-                  <i class="fa-solid fa-trash fa-fw"></i>
-                </button>
-              </td>
-            </tr>
-    `
+  if (tableSelector === 'personnelTableBody') {
+    // changing the way row is created and added to table 
+
+    var n_col = document.createElement('td')
+    n_col.classList = "align-middle text-nowrap"
+    var n_col_text = document.createTextNode(`${data.firstName + ' ' +  data.lastName}`)
+    n_col.append(n_col_text)
+    row.append(n_col)
+
+
+    var department = document.createElement('td')
+    department.classList = "align-middle text-nowrap d-none d-md-table-cell"
+    var department_text = document.createTextNode(data.department_name)
+    department.append(department_text)
+    row.append(department)
+
+
+
+    var location = document.createElement('td')
+    location.classList = "align-middle text-nowrap d-none d-md-table-cell"
+    var location_text = document.createTextNode(data.location_name)
+    location.append(location_text)
+    row.append(location)
+    location
+
+
+    var email = document.createElement('td')
+    email.classList = "align-middle text-nowrap d-none d-md-table-cell"
+    var email_text = document.createTextNode(data.email)
+    email.append(email_text)
+    row.append(email)
+
+
+    var actions = document.createElement('td')
+    actions.classList = "text-end text-nowrap"
+    
+    var editButton = document.createElement('button')
+    editButton.classList = "btn btn-primary btn-sm"
+    editButton.setAttribute("type", "button")
+    editButton.setAttribute("data-bs-toggle", "modal")
+    editButton.setAttribute("data-bs-target", "#editPersonnelModal")
+
+    editButton.setAttribute("data-id", data.id)
+    editButton.setAttribute("data-user", `${data.firstName + ' ' + data.lastName}`)
+
+    var editIcon = document.createElement('i')
+    editIcon.classList = "fa-solid fa-pencil fa-fw"
+    editButton.append(editIcon)
+
+
+
+
+
+
+
+
+
+
+    var deleteButton = document.createElement('button')
+    deleteButton.classList = "btn btn-primary btn-sm"
+    deleteButton.setAttribute("type", "button")
+    deleteButton.setAttribute("data-bs-toggle", "modal")
+    deleteButton.setAttribute("data-bs-target", "#deletePersonnelModal")
+
+    deleteButton.setAttribute("data-id", data.id)
+    deleteButton.setAttribute("data-user", `${data.firstName + ' ' +  data.lastName}`)
+
+    var deleteIcon = document.createElement('i')
+    deleteIcon.classList = "fa-solid fa-trash fa-fw"
+    deleteButton.append(deleteIcon)
+
+
+    actions.appendChild(editButton)
+    actions.appendChild(deleteButton)
+
+    row.append(actions)
+
+    
+    document.getElementById(tableSelector).append(row)
+    
+    
+  } else if (tableSelector === 'departmentTableBody') {
+    var department_col = document.createElement('td')
+    department_col.classList = "align-middle text-nowrap"
+    var department_text = document.createTextNode(data.department_name)
+    department_col.append(department_text)
+
+    row.append(department_col)
+
+    var location = document.createElement('td')
+    location.classList = 'align-middle text-nowrap d-none d-md-table-cell'
+    var location_text = document.createTextNode(data.location_name)
+    location.append(location_text)
+
+    row.append(location)
+
+
+     var actions = document.createElement('td')
+    actions.classList = "text-end text-nowrap"
+    
+    var editButton = document.createElement('button')
+    editButton.classList = "btn btn-primary btn-sm"
+    editButton.setAttribute("type", "button")
+    editButton.setAttribute("data-bs-toggle", "modal")
+    editButton.setAttribute("data-bs-target", "#editDepartmentModal")
+
+    editButton.setAttribute("data-id", data.id)
+    editButton.setAttribute("data-location", data.location_id)
+    editButton.setAttribute("data-name", data.department_name)
+    
+
+    var editIcon = document.createElement('i')
+    editIcon.classList = "fa-solid fa-pencil fa-fw"
+    editButton.append(editIcon)
+
+
+
+
+
+
+
+
+
+
+    var deleteButton = document.createElement('button')
+    deleteButton.classList = "btn btn-primary btn-sm"
+    deleteButton.setAttribute("type", "button")
+    deleteButton.setAttribute("data-bs-toggle", "modal")
+    deleteButton.setAttribute("data-id", data.id)
+    deleteButton.setAttribute("data-name", data.department_name)
+    deleteButton.setAttribute("data-location", data.location_id)
+
+    deleteButton.setAttribute("data-bs-target", "#deleteDepartmentModal")
+
+
+    var deleteIcon = document.createElement('i')
+    deleteIcon.classList = "fa-solid fa-trash fa-fw"
+    deleteButton.append(deleteIcon)
+
+
+    actions.appendChild(editButton)
+    actions.appendChild(deleteButton)
+
+    row.append(actions)
+
+    
+    document.getElementById(tableSelector).append(row)
+
+
+
+  } else if (tableSelector === 'locationTableBody') {
+   
+
+
+
+
+     
+
+    
+
+    var location = document.createElement('td')
+    location.classList = 'align-middle text-nowrap'
+    var location_text = document.createTextNode(data.location_name)
+    location.append(location_text)
+
+    row.append(location)
+
+
+     var actions = document.createElement('td')
+    actions.classList = "text-end text-nowrap"
+    
+    var editButton = document.createElement('button')
+    editButton.classList = "btn btn-primary btn-sm"
+    editButton.setAttribute("type", "button")
+    editButton.setAttribute("data-bs-toggle", "modal")
+    editButton.setAttribute("data-bs-target", "#editLocationModal")
+
+    editButton.setAttribute("data-id", data.location_id)
+    editButton.setAttribute("data-name", data.location_name)
+    
+
+    var editIcon = document.createElement('i')
+    editIcon.classList = "fa-solid fa-pencil fa-fw"
+    editButton.append(editIcon)
+
+
+
+
+
+
+
+
+
+
+    var deleteButton = document.createElement('button')
+    deleteButton.classList = "btn btn-primary btn-sm"
+    deleteButton.setAttribute("type", "button")
+    deleteButton.setAttribute("data-bs-toggle", "modal")
+    deleteButton.setAttribute("data-id", data.location_id)
+    deleteButton.setAttribute("data-name", data.location_name)
+
+    deleteButton.setAttribute("data-bs-target", "#deleteLocationModal")
+
+
+    var deleteIcon = document.createElement('i')
+    deleteIcon.classList = "fa-solid fa-trash fa-fw"
+    deleteButton.append(deleteIcon)
+
+
+    actions.appendChild(editButton)
+    actions.appendChild(deleteButton)
+
+    row.append(actions)
+
+    
+    document.getElementById(tableSelector).append(row)
   }
   
   // Append the new row to the specified table body using jQuery selector with '#'
 
 
-  $(tableSelector).append(newRow);
+
+  // $(tableSelector).append(row);
 }
 
 
@@ -692,7 +841,7 @@ function fetchAllPersonnelData(searchTerm = null) {
       
   $('#personnelTableBody').empty()
 
-      data.map(dat => appendRowToTable(dat, '#personnelTableBody'))
+      data.map(dat => appendRowToTable(dat, 'personnelTableBody'))
     }, 
     error: function (err) {
       console.error(err)
@@ -714,7 +863,7 @@ function fetchAllDepartsmentData(searchTerm= null) {
       console.log({ data })
   $('#departmentTableBody').empty()
       
-      data.map(dat => appendRowToTable(dat, '#departmentTableBody'))
+      data.map(dat => appendRowToTable(dat, 'departmentTableBody'))
 
 
        $("#createPersonnelDepartment").empty();
@@ -747,7 +896,7 @@ function fetchAllLocationsData(searchTerm = null) {
       console.log({ data })
   $('#locationTableBody').empty()
       
-      data.map(dat => appendRowToTable(dat, '#locationTableBody'))
+      data.map(dat => appendRowToTable(dat, 'locationTableBody'))
     }, 
     error: function (err) {
       console.error(err.responseText)
