@@ -319,11 +319,6 @@ $("#editDepartmentModal").on("show.bs.modal", function (e) {
   let dataName= $(e.relatedTarget).attr("data-name") 
   let dataLocation= $(e.relatedTarget).attr("data-location") 
  
- 
-  console.log({dataId})
- 
- 
- 
   $.ajax({      
     url: "server/api.php", 
     method: "GET", 
@@ -335,7 +330,6 @@ $("#editDepartmentModal").on("show.bs.modal", function (e) {
  
  
       if (result) {
-        console.log({result})
  
  
         // return false; 
@@ -354,10 +348,6 @@ $("#editDepartmentModal").on("show.bs.modal", function (e) {
   );
 });
  
- 
- 
-        // Update the hidden input with the employee id so that
-        // it can be referenced when the form is submitted
  
         $("#editDepartmentID").val(dataId);
         $("#editDepartmentName").val(dataName);
@@ -390,7 +380,6 @@ $("#editDepartmentForm").on("submit", function (e) {
   let departmentLocation = $("#editDepartmentLocation").val(); 
   let departmentID = $("#editDepartmentID").val(); 
  
-  console.log({ departmentName, departmentLocation, departmentID })
  
  
   $.ajax({
@@ -418,35 +407,19 @@ $("#editDepartmentForm").on("submit", function (e) {
   })
 })
  
- 
- 
- 
- 
- 
- 
- 
- 
 $("#deleteDepartmentModal").on("show.bs.modal", function (e) {
  
   // Get the data-id attribute from the button
-  let departmentID = $(e.relatedTarget).attr("data-id") ;
- 
- 
- 
- 
+  let departmentID = $(e.relatedTarget).attr("data-id") ; 
         // Set the ID in the hidden input of the modal
   $('#deleteDepartmentID').val(departmentID);
 });
- 
- 
- 
  
  
 $("#deleteDepartmentForm").on("submit", function (e) {
  
   e.preventDefault()
  
-  console.log({ e })
  
   let departmentID = $("#deleteDepartmentID").val();
  
@@ -460,7 +433,6 @@ $("#deleteDepartmentForm").on("submit", function (e) {
       },
       success: function (response) {
         // Handle the response from the server
-        console.log(response);
  
         alert("Department Deleted successfully!");
         fetchAllDepartsmentData()
@@ -474,12 +446,6 @@ $("#deleteDepartmentForm").on("submit", function (e) {
       }
     });
 })
- 
- 
- 
-// Location 
- 
- 
  
  
 $("#editLocationModal").on("show.bs.modal", function (e) {
@@ -504,13 +470,6 @@ $("#editLocationForm").on("submit", function (e) {
  
   let locationName = $("#editLocationName").val()
   let locationID = $("#editLocationID").val()
- 
- 
-  console.log({ locationName, locationID })
- 
- 
- 
- 
   $.ajax({
  
     method: "POST",
@@ -531,7 +490,6 @@ $("#editLocationForm").on("submit", function (e) {
         $("#editLocationModal").modal("hide")
  
       }
-      console.log({result})
     }, 
     error: function (error) {
       console.log({error})
@@ -552,16 +510,9 @@ $("#deleteLocationModal").on("show.bs.modal", function (e) {
  
 })
  
- 
- 
- 
- 
 $("#deleteLocationForm").on("submit", function (e) {
  
-  e.preventDefault()
- 
-  console.log({ e })
- 
+  e.preventDefault()  
   let locationID= $("#deleteLocationID").val();
  
  
@@ -574,8 +525,6 @@ $("#deleteLocationForm").on("submit", function (e) {
       },
       success: function (response) {
         // Handle the response from the server
-        console.log(response);
- 
         alert("Location Deleted successfully!");
         fetchAllLocationsData()
  
@@ -590,20 +539,14 @@ $("#deleteLocationForm").on("submit", function (e) {
 })
  
  
+function appendRowToPersonnelTable(data, fragment) {
  
-// Function to append a row using jQuery
- 
- 
-// Function to append a row using jQuery
-function appendRowToTable(data, tableSelector) {
- 
-  var fragment = document.createDocumentFragment()
  
   // Define the HTML content for the new row
     var row = document.createElement('tr')
  
  
-  if (tableSelector === 'personnelTableBody') {
+ 
     // changing the way row is created and added to table 
  
     var n_col = document.createElement('td')
@@ -681,11 +624,27 @@ function appendRowToTable(data, tableSelector) {
     row.append(actions)
  
  
-    document.getElementById(tableSelector).append(row)
  
  
-  } else if (tableSelector === 'departmentTableBody') {
-    var department_col = document.createElement('td')
+ 
+ 
+  fragment.appendChild(row);
+ 
+ 
+}
+ 
+ 
+ 
+function appendRowToDepartmentTable(data, fragment) {
+ 
+ 
+  // Define the HTML content for the new row
+    var row = document.createElement('tr')
+ 
+ 
+ 
+ 
+  var department_col = document.createElement('td')
     department_col.classList = "align-middle text-nowrap"
     var department_text = document.createTextNode(data.department_name)
     department_col.append(department_text)
@@ -712,21 +671,9 @@ function appendRowToTable(data, tableSelector) {
     editButton.setAttribute("data-id", data.id)
     editButton.setAttribute("data-location", data.location_id)
     editButton.setAttribute("data-name", data.department_name)
- 
- 
     var editIcon = document.createElement('i')
     editIcon.classList = "fa-solid fa-pencil fa-fw"
     editButton.append(editIcon)
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
     var deleteButton = document.createElement('button')
     deleteButton.classList = "btn btn-primary btn-sm"
     deleteButton.setAttribute("type", "button")
@@ -749,21 +696,17 @@ function appendRowToTable(data, tableSelector) {
     row.append(actions)
  
  
-    document.getElementById(tableSelector).append(row)
+ 
+ 
+  fragment.appendChild(row);
+}
  
  
  
-  } else if (tableSelector === 'locationTableBody') {
+function appendRowToLocationTable(data, fragment) {
+  var row = document.createElement('tr')
  
- 
- 
- 
- 
- 
- 
- 
- 
-    var location = document.createElement('td')
+  var location = document.createElement('td')
     location.classList = 'align-middle text-nowrap'
     var location_text = document.createTextNode(data.location_name)
     location.append(location_text)
@@ -817,21 +760,10 @@ function appendRowToTable(data, tableSelector) {
  
     row.append(actions)
  
- 
-  }
-  fragment.appendChild(row);
+  fragment.append(row)
  
  
-  document.getElementById(tableSelector).append(fragment)
-  // Append the new row to the specified table body using jQuery selector with '#'
- 
- 
- 
-  // $(tableSelector).append(row);
 }
- 
- 
- 
  
  
 function fetchAllPersonnelData(searchTerm = null) {
@@ -842,11 +774,13 @@ function fetchAllPersonnelData(searchTerm = null) {
     url: 'server/api.php',
     data: { action: 'fetchAllPersonnelData', searchTerm : searchTerm },
     success: function (data) {
-      console.log({ data })
+      $('#personnelTableBody').empty()
  
-  $('#personnelTableBody').empty()
+      var fragment = document.createDocumentFragment()
  
-      data.map(dat => appendRowToTable(dat, 'personnelTableBody'))
+ 
+      data.map(dat => appendRowToPersonnelTable(dat, fragment))
+      document.getElementById("personnelTableBody").append(fragment)
     }, 
     error: function (err) {
       console.error(err)
@@ -855,23 +789,19 @@ function fetchAllPersonnelData(searchTerm = null) {
   })
 }
  
- 
- 
- 
- 
 function fetchAllDepartsmentData(searchTerm= null) {
   $.ajax({
     method: "GET", 
     url: 'server/api.php',
     data: { action: 'fetchAllDepartsmentData' , searchTerm : searchTerm},
     success: function (data) {
-      console.log({ data })
-  $('#departmentTableBody').empty()
  
-      data.map(dat => appendRowToTable(dat, 'departmentTableBody'))
+      $('#departmentTableBody').empty()
+      let fragment = document.createDocumentFragment()  
+      data.map(dat => appendRowToDepartmentTable(dat, fragment))
  
+      document.getElementById('departmentTableBody').append(fragment)
  
-       $("#createPersonnelDepartment").empty();
  
         $.each(data, function () {
           $("#createPersonnelDepartment").append(
@@ -889,19 +819,19 @@ function fetchAllDepartsmentData(searchTerm= null) {
   })
 }
  
- 
- 
- 
 function fetchAllLocationsData(searchTerm = null) {
   $.ajax({
     method: "GET", 
     url: 'server/api.php',
     data: { action: 'fetchAllLocationsData', searchTerm : searchTerm },
     success: function (data) {
-      console.log({ data })
   $('#locationTableBody').empty()
+      var fragment = document.createDocumentFragment()
  
-      data.map(dat => appendRowToTable(dat, 'locationTableBody'))
+      data.map(dat => appendRowToLocationTable(dat, fragment))
+ 
+      document.getElementById('locationTableBody').append(fragment)
+ 
     }, 
     error: function (err) {
       console.error(err.responseText)
@@ -910,12 +840,6 @@ function fetchAllLocationsData(searchTerm = null) {
   })
 }
  
- 
- 
-function deletePersonnel(id) {
- 
- 
-}
  
 fetchAllPersonnelData()
 fetchAllDepartsmentData()
